@@ -1,9 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import PostForm
 from .models import Group, Post, User
-from django.contrib.auth.decorators import login_required
+
 
 DEF_POST = 10
 
@@ -81,8 +82,7 @@ def post_edit(request, post_id):
         return redirect('posts:post_detail', post_id=post_id)
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
-        post = form.save(commit=False)
-        post.save()
+        form.save()
         return redirect('posts:post_detail', post_id=post_id)
     context = {
         'form': form,
